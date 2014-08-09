@@ -1,0 +1,82 @@
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+    xmlns:p="http://primefaces.org/ui">
+        
+         <p:growl id="messages" showDetail="true"/>
+        
+            <f:facet name="header">  
+             Setor
+            </f:facet>
+            
+            <h:panelGrid columns="4" id="panel">
+             Poder: <p:selectOneMenu id="selectPoder" label="poder" value="#{setorBean.setor.poder}" required="true" converter="poderConverter" style="width:100%">
+                        <f:selectItem itemLabel="Selecione ( Poder )" noSelectionOption="true"/>
+                        <f:selectItems value="#{poderBean.lista}" var="poder" itemValue="#{poder}" itemLabel="#{poder.nome}" />
+                    </p:selectOneMenu>
+            
+            Nome:<h:inputText value="#{setorBean.setor.nome}" size="55"/>
+            </h:panelGrid>
+            
+        <p:commandButton value="Salvar" action="#{setorBean.salvar}" update="panel dtSetor messages " />
+        
+        <br /><br />
+        
+        <p:dataTable var="s" value="#{setorBean.lista}" paginator="true" rows="10" paginatorPosition="bottom" editable="true"
+                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                 rowsPerPageTemplate="10,15,20" id="dtSetor" emptyMessage="Não há nenhum resultado"  filteredValue="#{setorBean.lista}" resizableColumns="true"
+                 widgetVar="dtSetor3">
+        
+        <p:ajax event="rowEdit" listener="#{setorBean.onRowEdit}" update=":contentForm:messages" />
+        
+        <f:facet name="header">
+        Lista de setores
+            <div align="right">
+                <p:commandButton id="toggler" type="button" value="Colunas" icon="ui-icon-calculator" />
+                <p:columnToggler datasource="dtSetor" trigger="toggler" />
+            </div>
+        </f:facet>
+        
+         <p:column headerText="Poder" sortBy="#{s.poder.nome}" filterBy="#{s.poder.nome}" filterMatchMode="contains">
+
+            <p:cellEditor>
+                <f:facet name="output">
+                      <h:outputText value="#{s.poder.nome}" />
+                </f:facet>
+                <f:facet name="input">
+                    <h:selectOneMenu id="selectPoder" label="poder" value="#{s.poder}" required="true" converter="poderConverter">
+                        <f:selectItems value="#{poderBean.lista}" var="poder" itemValue="#{poder}" itemLabel="#{poder.nome}" />
+                    </h:selectOneMenu>
+                </f:facet>
+            </p:cellEditor>
+        </p:column>
+        
+        <p:column headerText="Nome" sortBy="#{s.nome}" filterBy="#{s.nome}" filterMatchMode="contains">
+            
+            <p:cellEditor>
+                <f:facet name="output">
+                      <h:outputText value="#{s.nome}" />
+                </f:facet>
+                <f:facet name="input">
+                    <p:inputText value="#{s.nome}" style="width:100%" label="Nome"/>
+                </f:facet>
+            </p:cellEditor>
+        </p:column>
+        
+        <p:column style="width:4%;align:center">
+            <p:rowEditor />
+        </p:column>
+        
+        <p:column style="width:4%;align:center">
+           <p:commandLink action="#{setorBean.excluir}" process="@this" update="dtSetor :contentForm:messages">
+                    <h:graphicImage library="imagens" name="excluir16.png"/>
+                    <f:setPropertyActionListener target="#{setorBean.setor}" value="#{s}" />
+           </p:commandLink>
+       </p:column>
+       </p:dataTable>
+        
+</ui:composition>
+
+

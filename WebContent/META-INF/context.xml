@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context reloadable="true">
+	<Resource	name="jdbc/VectorDB" 
+				auth="Container" 
+				type="javax.sql.DataSource"
+				factory="org.apache.commons.dbcp.BasicDataSourceFactory"
+			    maxPoolSize="50"   
+			    minPoolSize="15"
+			    acquireIncrement="3"
+			    acquireRetryAttempts = "0"
+			    acquireRetryDelay = "3000"
+			    breakAfterAcquireFailure = "false"
+			    maxConnectionAge = "60"
+			    maxIdleTime = "30"
+			    maxIdleTimeExcessConnections = "10"
+			    idleConnectionTestPeriod = "15"
+			    testConnectionOnCheckout = "true"
+			    preferredTestQuery = "SELECT 1"
+			    debugUnreturnedConnectionStackTraces = "true"  
+			    autoCommitOnClose="true"
+				username="root" 
+				password="vectortestroot" 
+				driverClassName="com.mysql.jdbc.Driver"
+				url="jdbc:mysql://vectortest.cubupiuk3qim.sa-east-1.rds.amazonaws.com/vectortest"/>
+	
+
+</Context>

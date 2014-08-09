@@ -1,0 +1,104 @@
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+    xmlns:p="http://primefaces.org/ui">
+
+        <c:set var="cargo" value="#{cargoBean.cargo}" />
+        <c:set var="controller" value="#{cargoBean}" />
+        <c:set var="controllerOrgao" value="#{orgaoBean}" />
+        <c:set var="controllerSetor" value="#{setorBean}" />
+        
+         <p:growl id="messages" showDetail="true"/>
+        
+            <f:facet name="header">  
+              Cargo
+            </f:facet>
+            
+            <h:panelGrid columns="4" id="panel">
+            
+             Órgão: <p:selectOneMenu id="selectOrgao" label="orgao" value="#{cargoBean.cargo.orgao}" required="true" converter="orgaoConverter">
+                        <f:selectItem itemLabel="Selecione ( Órgão - Setor )" noSelectionOption="true" />
+                        <f:selectItems value="#{orgaoBean.lista}" var="orgao" itemValue="#{orgao}" itemLabel="#{orgao.nome} - #{orgao.setor.nome}" />
+                    </p:selectOneMenu>
+            
+            Nome:<h:inputText value="#{cargoBean.cargo.nome}" size="55" />
+            
+            </h:panelGrid>
+            
+        <p:commandButton value="Salvar" action="#{cargoBean.salvar}" update="panel dtCargo messages " />
+        
+        <br /><br />
+        
+        <p:dataTable var="c" value="#{cargoBean.lista}" paginator="true" rows="10" paginatorPosition="bottom" editable="true"
+                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                 rowsPerPageTemplate="10,15,20" id="dtCargo" emptyMessage="Não há nenhum resultado"  filteredValue="#{cargoBean.lista}" resizableColumns="true">
+        
+        <p:ajax event="rowEdit" listener="#{cargoBean.onRowEdit}" update=":contentForm:messages" />
+        
+        <f:facet name="header">
+        Lista de cargos
+            <div align="right">
+                <p:commandButton id="toggler" type="button" value="Colunas" icon="ui-icon-calculator" />
+                <p:columnToggler datasource="dtCargo" trigger="toggler" />
+            </div>
+        </f:facet>
+        
+        
+          <p:column headerText="Nome" sortBy="#{c.nome}" filterBy="#{c.nome}" filterMatchMode="contains">
+            
+            <p:cellEditor>
+                <f:facet name="output">
+                      <h:outputText value="#{c.nome}" />
+                </f:facet>
+                <f:facet name="input">
+                    <p:inputText value="#{c.nome}" style="width:100%" label="Nome"/>
+                </f:facet>
+            </p:cellEditor>
+        </p:column>
+        
+         <p:column headerText="Orgão" sortBy="#{c.orgao.nome}" filterBy="#{c.orgao.nome}" filterMatchMode="contains">
+            
+            <p:cellEditor>
+                <f:facet name="output">
+                      <h:outputText value="#{c.orgao.nome}" />
+                </f:facet>
+                <f:facet name="input">
+                    <h:selectOneMenu id="selectOrgao" label="orgao" value="#{c.orgao}" required="true" converter="orgaoConverter">
+                        <f:selectItems value="#{orgaoBean.lista}" var="orgao" itemValue="#{orgao}" itemLabel="#{orgao.nome}" />
+                    </h:selectOneMenu>
+                </f:facet>
+            </p:cellEditor>
+        </p:column>
+        
+         <p:column headerText="Setor" sortBy="#{c.orgao.setor.nome}" filterBy="#{c.orgao.setor.nome}" filterMatchMode="contains">
+            
+            <p:cellEditor>
+                <f:facet name="output">
+                      <h:outputText value="#{c.orgao.setor.nome}" />
+                </f:facet>
+                <f:facet name="input">
+                    <h:selectOneMenu id="selectSetor" label="setor" value="#{c.orgao.setor}" required="true" converter="setorConverter">
+                        <f:selectItems value="#{setorBean.lista}" var="setor" itemValue="#{setor}" itemLabel="#{setor.nome}" />
+                    </h:selectOneMenu>
+                </f:facet>
+            </p:cellEditor>
+        </p:column>
+
+        <p:column style="width:4%;align:center">
+            <p:rowEditor />
+        </p:column>
+
+          <p:column style="width:4%;align:center">
+           <p:commandLink action="#{cargoBean.excluir}" process="@this" update="dtCargo :contentForm:messages">
+                    <h:graphicImage library="imagens" name="excluir16.png"/>
+                    <f:setPropertyActionListener target="#{cargoBean.cargo}" value="#{c}" />
+           </p:commandLink>
+       </p:column>
+        
+       </p:dataTable>
+        
+</ui:composition>
+
+

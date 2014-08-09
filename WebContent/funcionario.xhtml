@@ -1,0 +1,217 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+    xmlns:p="http://primefaces.org/ui">
+        
+         <p:growl id="messages" showDetail="true"/>
+        
+            <f:facet name="header">  
+              Funcionário
+            </f:facet>
+            
+            <h:panelGrid columns="2" id="panel">
+            
+	            Cargo: <p:selectOneMenu id="selectCargo" label="cargo" value="#{funcionarioBean.funcionario.cargo}" required="true" converter="cargoConverter">
+	                        <f:selectItem itemLabel="Selecione ( Cargo - Órgão - Setor )" noSelectionOption="true" />
+	                        <f:selectItems value="#{cargoBean.lista}" var="cargo" itemValue="#{cargo}" itemLabel="#{cargo.nome} - #{cargo.orgao.nome} - #{cargo.orgao.setor.nome}" />
+	                    </p:selectOneMenu>
+	                    </h:panelGrid>
+	         <h:panelGrid columns="6" id="panel2">    
+	            Nome:<h:inputText value="#{funcionarioBean.funcionario.nome}" />
+	            Aniversário:<p:calendar value="#{funcionarioBean.funcionario.aniversario}" locale="pt" navigator="true" id="ptCal" pattern="dd/MM"/>           
+	            Email:<p:inputText value="#{funcionarioBean.funcionario.email}" validatorMessage="Email inválido">
+		               <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+		            </p:inputText>
+		        Email2:<p:inputText value="#{funcionarioBean.funcionario.email2}" validatorMessage="Email inválido">
+                       <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                    </p:inputText>
+	            Fax:<p:inputMask value="#{funcionarioBean.funcionario.fax}" mask="(099) 9999-9999?9"/>
+                Telefone:<p:inputMask value="#{funcionarioBean.funcionario.telefone1}" mask="(099) 9999-9999?9"/>
+                Telefone2:<p:inputMask value="#{funcionarioBean.funcionario.telefone2}" mask="(099) 9999-9999?9"/>
+                Telefone3:<p:inputMask value="#{funcionarioBean.funcionario.telefone3}" mask="(099) 9999-9999?9"/>
+                Complemento:<h:inputText value="#{funcionarioBean.funcionario.complemento}" />
+                
+        </h:panelGrid>
+
+        <p:commandButton value="Salvar" action="#{funcionarioBean.salvar}" update="messages dtFuncionario panel panel2"/>
+        
+       <br /><br />
+       
+       <p:dataTable var="f" value="#{funcionarioBean.lista}" paginator="true" rows="15" paginatorPosition="bottom" editable="true"
+                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                 rowsPerPageTemplate="15,20,25" id="dtFuncionario" emptyMessage="Não há nenhum resultado" filteredValue="#{funcionarioBean.lista}" resizableColumns="true">
+        
+        <p:ajax event="rowEdit" listener="#{funcionarioBean.onRowEdit}" update=":contentForm:messages" />
+        
+        <f:facet name="header">
+        Lista de funcionários
+            <div align="right">
+		        <p:commandButton id="toggler" type="button" value="Colunas" icon="ui-icon-calculator" />
+		        <p:columnToggler datasource="dtFuncionario" trigger="toggler" />
+            </div>
+        </f:facet>
+
+            <p:column headerText="Nome" sortBy="#{f.nome}" filterBy="#{f.nome}" filterMatchMode="contains">
+            
+	            <p:cellEditor>
+	                <f:facet name="output">
+	                      <h:outputText value="#{f.nome}" />
+	                </f:facet>
+	                <f:facet name="input">
+	                    <p:inputText value="#{f.nome}" style="width:100%" label="Nome"/>
+	                </f:facet>
+	            </p:cellEditor>
+            </p:column>
+
+        <p:column headerText="Aniversário" sortBy="#{f.aniversario}" filterBy="#{f.aniversario}" filterMatchMode="contains">
+            
+            <p:cellEditor>
+                <f:facet name="output">
+                      <h:outputText value="#{f.aniversario}">
+                      <f:convertDateTime type="date" pattern="dd/MM"/>
+                      </h:outputText>
+                </f:facet>
+                <f:facet name="input">
+                    <p:calendar value="#{f.aniversario}" locale="pt" navigator="true" id="ptCal" pattern="dd/MM"/>
+                </f:facet>
+            </p:cellEditor>
+        </p:column>
+        
+        <p:column headerText="Email" sortBy="#{f.email}" filterBy="#{f.email}" filterMatchMode="contains">
+            
+            <p:cellEditor>
+                <f:facet name="output">
+                      <h:outputText value="#{f.email}" />
+                </f:facet>
+                <f:facet name="input">
+                    <p:inputText value="#{f.email}" validatorMessage="Email inválido">
+                        <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                    </p:inputText>
+                </f:facet>
+            </p:cellEditor>
+        </p:column>
+        
+        <p:column headerText="Email2" sortBy="#{f.email2}" filterBy="#{f.email2}" filterMatchMode="contains">
+            
+            <p:cellEditor>
+                <f:facet name="output">
+                      <h:outputText value="#{f.email2}" />
+                </f:facet>
+                <f:facet name="input">
+                    <p:inputText value="#{f.email2}" validatorMessage="Email inválido">
+                        <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                    </p:inputText>
+                </f:facet>
+            </p:cellEditor>
+        </p:column>
+        
+        <p:column headerText="Telefone" sortBy="#{f.telefone1}" filterBy="#{f.telefone1}" filterMatchMode="contains">
+            
+            <p:cellEditor>
+                <f:facet name="output">
+                      <h:outputText value="#{f.telefone1}" />
+                </f:facet>
+                <f:facet name="input">
+                    <p:inputMask value="#{f.telefone1}" mask="(099) 9999-9999?9"/>
+                </f:facet>
+            </p:cellEditor>
+        </p:column>
+        
+         <p:column headerText="Telefone2" sortBy="#{f.telefone2}" filterBy="#{f.telefone2}" filterMatchMode="contains">
+            
+            <p:cellEditor>
+                <f:facet name="output">
+                      <h:outputText value="#{f.telefone2}" />
+                </f:facet>
+                <f:facet name="input">
+                    <p:inputMask value="#{f.telefone2}" mask="(099) 9999-9999?9"/>
+                </f:facet>
+            </p:cellEditor>
+        </p:column>
+        
+   
+         <p:column headerText="Telefone3" sortBy="#{f.telefone3}" filterBy="#{f.telefone3}" filterMatchMode="contains">
+            
+            <p:cellEditor>
+                <f:facet name="output">
+                      <h:outputText value="#{f.telefone3}" />
+                </f:facet>
+                <f:facet name="input">
+                    <p:inputMask value="#{f.telefone3}" mask="(099) 9999-9999?9"/>
+                </f:facet>
+            </p:cellEditor>
+        </p:column>
+        
+        <p:column headerText="Fax" sortBy="#{f.fax}" filterBy="#{f.fax}" filterMatchMode="contains">
+            
+            <p:cellEditor>
+                <f:facet name="output">
+                      <h:outputText value="#{f.fax}" />
+                </f:facet>
+                <f:facet name="input">
+                    <p:inputMask value="#{f.fax}" mask="(099) 9999-9999?9"/>
+                </f:facet>
+            </p:cellEditor>
+        </p:column>
+       
+         <p:column headerText="Cargo" sortBy="#{f.cargo.nome}" filterBy="#{f.cargo.nome}" filterMatchMode="contains">
+            
+            <p:cellEditor>
+                <f:facet name="output">
+                      <h:outputText value="#{f.cargo.nome}" />
+                </f:facet>
+                <f:facet name="input">
+                    <h:selectOneMenu id="selectCargo" label="cargo" value="#{f.cargo}" required="true" converter="cargoConverter">
+                        <f:selectItems value="#{cargoBean.lista}" var="cargo" itemValue="#{cargo}" itemLabel="#{cargo.nome}" />
+                    </h:selectOneMenu>
+                </f:facet>
+            </p:cellEditor>
+            
+        </p:column>
+        
+           <p:column headerText="Orgão" sortBy="#{f.cargo.orgao.nome}" filterBy="#{f.cargo.orgao.nome}" filterMatchMode="contains">
+            
+                <p:cellEditor>
+                    <f:facet name="output">
+                          <h:outputText value="#{f.cargo.orgao.nome}" />
+                    </f:facet>
+                       <f:facet name="input">
+                        <h:selectOneMenu id="selectOrgao" label="orgao" value="#{f.cargo.orgao}" required="true" converter="orgaoConverter">
+                            <f:selectItems value="#{orgaoBean.lista}" var="orgao" itemValue="#{orgao}" itemLabel="#{orgao.nome}" />
+                        </h:selectOneMenu>
+                </f:facet>
+                </p:cellEditor>
+            </p:column>
+            
+           <p:column headerText="Setor" sortBy="#{f.cargo.orgao.setor.nome}" filterBy="#{f.cargo.orgao.setor.nome}" filterMatchMode="contains">
+            
+                <p:cellEditor>
+                    <f:facet name="output">
+                          <h:outputText value="#{f.cargo.orgao.setor.nome}" />
+                    </f:facet>
+                    <f:facet name="input">
+                        <h:selectOneMenu id="selectSetor" label="setor" value="#{f.cargo.orgao.setor}" required="true" converter="setorConverter">
+                            <f:selectItems value="#{setorBean.lista}" var="setor" itemValue="#{setor}" itemLabel="#{setor.nome}" />
+                        </h:selectOneMenu>
+                </f:facet>
+                </p:cellEditor>
+            </p:column>
+        
+	        <p:column style="width:4%;align:center">
+	            <p:rowEditor />
+	        </p:column>
+            
+            <p:column style="width:4%;align:center">
+           <p:commandLink action="#{funcionarioBean.excluir}" process="@this" update="dtFuncionario :contentForm:messages">
+                    <h:graphicImage library="imagens" name="excluir16.png"/>
+                    <f:setPropertyActionListener target="#{funcionarioBean.funcionario}" value="#{f}" />
+           </p:commandLink>
+       </p:column>
+            
+       </p:dataTable>
+        
+</ui:composition>
+
+

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC 
+    "-//Hibernate/Hibernate Configuration DTD//EN"
+    "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+		<property name="dialect">org.hibernate.dialect.MySQL5InnoDBDialect</property>
+		<property name="connection.datasource">java:comp/env/jdbc/VectorDB</property> 
+        <property name="current_session_context_class">thread</property> 
+		<property name="hibernate.hbm2ddl.auto">update</property>
+		<property name="show_sql">true</property>
+		<property name="format_sql">true</property>
+		
+		<!-- C3p0 -->
+		<!-- <property name="c3p0.acquireIncrement">1</property>
+		<property name="c3p0.idleConnectionTestPeriod">100</property>
+		<property name="c3p0.timeout">1800</property>
+		<property name="c3p0.maxPoolSize">25</property>
+		<property name="c3p0.minPoolSize">5</property>
+		<property name="c3p0.preferredTestQuery">select 1;</property>
+		<property name="c3p0.testConnectionOnCheckout">true</property> -->
+
+
+        <mapping class="br.com.vector.poder.Poder"/>
+        <mapping class="br.com.vector.setor.Setor"/>
+        <mapping class="br.com.vector.orgao.Orgao"/>
+        <mapping class="br.com.vector.cargo.Cargo"/>
+        <mapping class="br.com.vector.funcionario.Funcionario"/>
+
+    </session-factory>
+</hibernate-configuration>

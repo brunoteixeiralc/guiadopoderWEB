@@ -1,0 +1,70 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+    xmlns:p="http://primefaces.org/ui">
+        
+        <p:growl id="messages" showDetail="true"/>
+        
+			<f:facet name="header">  
+		      Poder
+		    </f:facet>
+
+			Nome:<p:inputText value="#{poderBean.poder.nome}" id="nome" required="true" requiredMessage="Campo nome obrigatório"/>
+            Cor:<p:colorPicker value="#{poderBean.poder.cor}" id="cor" />       
+
+		<p:commandButton value="Salvar" update="dtPoder nome cor messages " actionListener="#{poderBean.salvar}"/>
+	   
+	   <br /><br />
+	   
+	   <p:dataTable var="p" value="#{poderBean.lista}" paginator="true" rows="5" paginatorPosition="bottom" editable="true"
+                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                 rowsPerPageTemplate="5,10,15" id="dtPoder" emptyMessage="Não há nenhum resultado"  filteredValue="#{poderBean.lista}" style="width:50%;align:center"
+                 resizableColumns="true">
+
+       <p:ajax event="rowEdit" listener="#{poderBean.onRowEdit}" update=":contentForm:messages" />
+        
+        <p:column headerText="Nome" sortBy="#{p.nome}" filterBy="#{p.nome}" filterMatchMode="contains" >
+            
+            <p:cellEditor>
+                <f:facet name="output">
+                      <h:outputText value="#{p.nome}" />
+                </f:facet>
+                <f:facet name="input">
+                    <p:inputText value="#{p.nome}" style="width:100%" label="Nome"/>
+                </f:facet>
+            </p:cellEditor>
+        </p:column>
+        
+         <p:column headerText="Cor" style="background-color: ##{p.cor};width:16%">
+            
+            <p:cellEditor>
+                <f:facet name="output">
+                      <h:outputText value=""/>
+                </f:facet>
+                <f:facet name="input">
+                    <p:colorPicker value="#{p.cor}" /> 
+                </f:facet>
+            </p:cellEditor>
+        </p:column>
+        
+       <p:column style="width:6%;align:center">
+            <p:rowEditor />
+        </p:column> 
+        
+        <p:column style="width:6%;align:center">
+	       <p:commandLink action="#{poderBean.excluir}" process="@this" update="dtPoder :contentForm:messages">
+	                <h:graphicImage library="imagens" name="excluir16.png"/>
+	                <f:setPropertyActionListener target="#{poderBean.poder}" value="#{p}" />
+	       </p:commandLink>
+       </p:column>
+        
+        </p:dataTable>
+
+</ui:composition>
+
+
+
+
+
